@@ -1,0 +1,26 @@
+﻿@model CategoriasMVC.Models.CategoriaVM
+@{
+    ViewBag.action = "Delete";
+    ViewBag.readOnly = false;
+}
+
+<h2>Remover uma categoria</h2>
+
+<form asp-action="Delete">
+    <fieldset disabled>
+        @Html.Partial("Form", Model)
+    </fieldset>
+    <div class="form-group" style="padding-top: 10px">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Excluir" class="btn btn-danger">
+            <a asp-action="Index" class="btn btn-info">Retornar</a>
+        </div>
+    </div>
+
+    @if (ViewBag.Erro != null)
+    {
+        <div style="color: red">
+            <h4>@ViewBag.erro</h4>
+        </div>
+    }
+</form>
