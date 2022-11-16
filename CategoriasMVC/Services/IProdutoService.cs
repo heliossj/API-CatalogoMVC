@@ -3,7 +3,7 @@ namespace CategoriasMVC.Services;
 
 public interface IProdutoService
 {
-    Task<IEnumerable<ProdutoVM>> GetProduto(string token);
+    Task<IEnumerable<ProdutoVM>> GetProdutos(string token);
     Task<ProdutoVM> GetProdutoId(int id, string token);
     Task<ProdutoVM> CreateProduto(ProdutoVM produto, string token);
     Task<bool> UpdateProduto(int id, ProdutoVM produto, string token);

@@ -13,7 +13,7 @@ namespace CategoriasMVC.Models
         public string? Descricao { get; set; }
 
         [Required(ErrorMessage = "Informe o preço do produto")]
-        public string? Preco { get; set; }
+        public Decimal Preco { get; set; }
 
         [Display(Name = "Caminho da imagem")]
         [Required(ErrorMessage = "Informe o caminho da imagem do produto")]

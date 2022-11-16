@@ -1,5 +1,6 @@
 ﻿using CategoriasMVC.Models;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace CategoriasMVC.Services;
@@ -10,41 +11,99 @@ public class ProdutoService : IProdutoService
     private readonly JsonSerializerOptions _options;
     private readonly IHttpClientFactory _clientFactory;
 
-    private CategoriaVM categoriaVM;
-    private IEnumerable<CategoriaVM> categoriasVM;
+    private ProdutoVM produtoVM;
+    private IEnumerable<ProdutoVM> produtosVM;
 
     public ProdutoService(IHttpClientFactory clientFactory)
     {
-        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         _clientFactory = clientFactory;
+        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 
-    public Task<IEnumerable<ProdutoVM>> GetProduto(string token)
+    public async Task<IEnumerable<ProdutoVM>> GetProdutos(string token)
     {
         var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
 
-        return null;
-
+        using (var response = await client.GetAsync(apiEndPoint))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStreamAsync();
+                produtosVM = await JsonSerializer.DeserializeAsync<IEnumerable<ProdutoVM>>(apiResponse, _options);
+            } else
+                return null;
+        }
+        return produtosVM;
     }
 
-    public Task<ProdutoVM> GetProdutoId(int id, string token)
+    public async Task<ProdutoVM> GetProdutoId(int id, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        using (var response = await client.GetAsync(apiEndPoint + id))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStreamAsync();
+                produtoVM = await JsonSerializer
+                            .DeserializeAsync<ProdutoVM>
+                            (apiResponse, _options);
+            }
+            else
+                return null;
+        }
+        return produtoVM;
     }
 
-    public Task<ProdutoVM> CreateProduto(ProdutoVM produto, string token)
+    public async Task<ProdutoVM> CreateProduto(ProdutoVM produto, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        var prod = JsonSerializer.Serialize(produto);
+        StringContent content = new StringContent(prod, Encoding.UTF8, "application/json");
+
+        using (var response = await client.PostAsync(apiEndPoint, content))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStreamAsync();
+                produto = await JsonSerializer
+                            .DeserializeAsync<ProdutoVM>
+                            (apiResponse, _options);
+            } else
+                return null;
+        }
+        return produto;
     }
 
-    public Task<bool> UpdateProduto(int id, ProdutoVM produto, string token)
+    public async Task<bool> UpdateProduto(int id, ProdutoVM produto, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        using (var response = await client.PutAsJsonAsync(apiEndPoint + id, produto))
+        {
+            if (response.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
+        }
     }
 
-    public Task<bool> DeleteProduto(int id, string token)
+    public async Task<bool> DeleteProduto(int id, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        using (var response = await client.DeleteAsync(apiEndPoint + id))
+        {
+            if (response.IsSuccessStatusCode)
+                return true;
+        }
+        return false;
     }
 
     private static void PutTokenInHeaderAuthorization(string token, HttpClient client)
