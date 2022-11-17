@@ -1,0 +1,62 @@
+﻿@model CategoriasMVC.Models.ProdutoVM
+@{
+    bool readOnly = Convert.ToBoolean(ViewBag.ReadOnly);
+    string action = Convert.ToString(ViewBag.Action);
+}
+
+<div class="form-horizontal">
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    @if (action != "Create")
+    {
+        @*<div asp-validation-summary="ModelOnly" class="text-danger">qweqwe</div>*@
+        <div class="col-md-2">
+            <input asp-for="ProdutoId" type="hidden" />
+            <input asp-for="ProdutoId" class="form-control" readOnly>
+        </div>
+    }
+
+    <div class="form-group">
+        <label asp-for="Nome" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control"})
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Descricao, new {@class = "col-md-2 control label"})
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Descricao, new { @class = "form-control"})
+            @Html.ValidationMessageFor(model => model.Descricao, null, new { @class = "text-danger"})
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Preco" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Preco, new { @class = "form-control"})
+            <span asp-validation-for="Preco" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="CategoriaID" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="CategoriaID" class="form-control" asp-items="ViewBag.CategoriaID"></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImagemUrl, new {@class = "col-md-2 control label"})
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ImagemUrl, new { @class = "form-control"})
+            @Html.ValidationMessageFor(model => model.ImagemUrl, null, new { @class = "text-danger"})
+        </div>
+    </div>
+
+    <div>
+    </div>
+
+</div>

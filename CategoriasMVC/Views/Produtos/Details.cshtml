@@ -1,0 +1,18 @@
+﻿@model CategoriasMVC.Models.ProdutoVM
+@{
+    ViewBag.action = "Details";
+    ViewBag.readOnly = false;
+}
+
+<h2>Remover uma categoria</h2>
+
+<form asp-action="Create">
+    <fieldset disabled>
+        @Html.Partial("Form", Model)
+    </fieldset>
+    <div class="form-group" style="padding-top: 10px">
+        <div class="col-md-offset-2 col-md-10">
+            <a asp-action="Index" class="btn btn-info">Retornar</a>
+        </div>
+    </div>
+</form>

@@ -53,6 +53,9 @@
                         @Html.DisplayFor(modelItem => item.ImagemUrl)
                     </td>
                     <td>
+                        <a asp-action="Details" asp-route-id="@item.ProdutoId" title="Visualizar" class="btn btn-info">
+                            <span class="fas fa-eye"></span>
+                        </a>
                         <a asp-action="Edit" asp-route-id="@item.ProdutoId" title="Editar" class="btn btn-warning">
                             <span class="fas fa-edit"></span>
                         </a>
